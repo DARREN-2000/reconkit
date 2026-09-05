@@ -1,0 +1,26 @@
+site_name: ReconKit
+site_description: Security Reconnaissance & Assessment Platform
+repo_url: https://github.com/DARREN-2000/reconkit
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.magiclink
+
+nav:
+  - Home: index.md

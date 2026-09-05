@@ -1,0 +1,11 @@
+# Code Owners
+
+# Global owners
+* @DARREN-2000
+
+# ReconKit Core
+/reconkit/ @DARREN-2000
+
+# Tests
+/test_*.py @DARREN-2000
+/unit_tests.py @DARREN-2000

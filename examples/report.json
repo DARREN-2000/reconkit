@@ -1,0 +1,561 @@
+{
+  "tool": "reconkit",
+  "version": "2.2.0",
+  "target": "http://lab.test",
+  "scope": [
+    "lab.test"
+  ],
+  "started_utc": "2026-08-07T15:56:04.628584+00:00",
+  "finished_utc": "2026-08-07T15:56:04.628599+00:00",
+  "module_count": 19,
+  "modules": [
+    {
+      "module": "robots",
+      "summary": "6 path(s)/URL(s) from robots + sitemap",
+      "findings": [
+        {
+          "source": "robots.txt",
+          "type": "path",
+          "value": "/admin"
+        },
+        {
+          "source": "robots.txt",
+          "type": "path",
+          "value": "/private/"
+        },
+        {
+          "source": "robots.txt",
+          "type": "path",
+          "value": "/backup"
+        },
+        {
+          "source": "sitemap",
+          "type": "url",
+          "value": "http://lab.test/"
+        },
+        {
+          "source": "sitemap",
+          "type": "url",
+          "value": "http://lab.test/about"
+        },
+        {
+          "source": "sitemap",
+          "type": "url",
+          "value": "http://lab.test/contact"
+        }
+      ],
+      "data": {
+        "sitemaps": [
+          "http://lab.test/sitemap.xml"
+        ]
+      }
+    },
+    {
+      "module": "params",
+      "summary": "2 form(s), 4 query param(s)",
+      "findings": [
+        {
+          "type": "form",
+          "method": "GET",
+          "action": "http://lab.test/search",
+          "params": "q, csrf"
+        },
+        {
+          "type": "form",
+          "method": "POST",
+          "action": "http://lab.test/login",
+          "params": "username, password"
+        },
+        {
+          "type": "query",
+          "method": "GET",
+          "action": "/item",
+          "params": "id"
+        },
+        {
+          "type": "query",
+          "method": "GET",
+          "action": "/item",
+          "params": "ref"
+        },
+        {
+          "type": "query",
+          "method": "GET",
+          "action": "/search",
+          "params": "q"
+        },
+        {
+          "type": "query",
+          "method": "GET",
+          "action": "/go",
+          "params": "url"
+        }
+      ],
+      "data": {
+        "forms": 2,
+        "query_params": 4
+      }
+    },
+    {
+      "module": "cookies",
+      "summary": "2 cookie(s), 1 with weak flags",
+      "findings": [
+        {
+          "cookie": "sessionid",
+          "secure": false,
+          "httponly": false,
+          "samesite": "(unset)",
+          "issues": "no Secure, no HttpOnly, no SameSite"
+        },
+        {
+          "cookie": "secure_ok",
+          "secure": true,
+          "httponly": true,
+          "samesite": "Strict",
+          "issues": "ok"
+        }
+      ],
+      "data": {
+        "weak": 1
+      }
+    },
+    {
+      "module": "waf",
+      "summary": "mod_security detected",
+      "findings": [
+        {
+          "signal": "blocked-status",
+          "payload": "/?x=<script>alert(1)</script>",
+          "detail": "403"
+        },
+        {
+          "signal": "blocked-status",
+          "payload": "/?id=1' OR '1'='1",
+          "detail": "403"
+        },
+        {
+          "signal": "blocked-status",
+          "payload": "/?q=../../../../etc/passwd",
+          "detail": "403"
+        },
+        {
+          "signal": "vendor",
+          "payload": "-",
+          "detail": "mod_security"
+        }
+      ],
+      "data": {
+        "blocked_payloads": 3,
+        "vendors": [
+          "mod_security"
+        ]
+      }
+    },
+    {
+      "module": "cors",
+      "summary": "2 CORS issue(s)",
+      "findings": [
+        {
+          "issue": "origin reflection",
+          "acao": "https://evil.example",
+          "credentials": true,
+          "severity": "high"
+        },
+        {
+          "issue": "null origin allowed",
+          "acao": "null",
+          "credentials": true,
+          "severity": "medium"
+        }
+      ],
+      "data": {}
+    },
+    {
+      "module": "openredirect",
+      "summary": "2 open-redirect vector(s)",
+      "findings": [
+        {
+          "type": "path",
+          "vector": "/redirect",
+          "status": 302,
+          "location": "https://evil.example/"
+        },
+        {
+          "type": "path",
+          "vector": "/go",
+          "status": 302,
+          "location": "https://evil.example/"
+        }
+      ],
+      "data": {
+        "vectors": 2
+      }
+    },
+    {
+      "module": "secrets",
+      "summary": "3 potential secret(s) across 2 document(s)",
+      "findings": [
+        {
+          "type": "AWS access key",
+          "match": "AKIAIO***XAMPLE",
+          "source": "http://lab.test/static/app.js"
+        },
+        {
+          "type": "Google API key",
+          "match": "AIzaSy***qrstuv",
+          "source": "http://lab.test/static/app.js"
+        },
+        {
+          "type": "Generic secret",
+          "match": "sk_liv***efghij",
+          "source": "http://lab.test/static/app.js"
+        }
+      ],
+      "data": {
+        "secrets": 3,
+        "scanned": 2
+      }
+    },
+    {
+      "module": "injection",
+      "summary": "2 injection signal(s) across 7 parameter(s)",
+      "findings": [
+        {
+          "param": "q",
+          "type": "reflected-input",
+          "endpoint": "/search"
+        },
+        {
+          "param": "q",
+          "type": "sql-error",
+          "endpoint": "/search"
+        }
+      ],
+      "data": {
+        "signals": 2,
+        "tested": 7
+      }
+    },
+    {
+      "module": "takeover",
+      "summary": "2 takeover signature(s)",
+      "findings": [
+        {
+          "service": "AWS S3",
+          "signature": "the specified bucket does not exist",
+          "status": 404
+        },
+        {
+          "service": "AWS S3",
+          "signature": "nosuchbucket",
+          "status": 404
+        }
+      ],
+      "data": {
+        "matched": 2
+      }
+    },
+    {
+      "module": "defaultcreds",
+      "summary": "1 default-credential hit(s)",
+      "findings": [
+        {
+          "url": "http://lab.test/admin",
+          "cred": "admin:admin",
+          "status": 200
+        }
+      ],
+      "data": {
+        "realms": 1,
+        "hits": 1
+      }
+    },
+    {
+      "module": "headers",
+      "summary": "6 security header(s) missing",
+      "findings": [
+        {
+          "header": "strict-transport-security",
+          "status": "missing",
+          "detail": "HSTS"
+        },
+        {
+          "header": "content-security-policy",
+          "status": "missing",
+          "detail": "CSP"
+        },
+        {
+          "header": "x-frame-options",
+          "status": "missing",
+          "detail": "clickjacking protection"
+        },
+        {
+          "header": "x-content-type-options",
+          "status": "missing",
+          "detail": "MIME-sniffing protection"
+        },
+        {
+          "header": "referrer-policy",
+          "status": "missing",
+          "detail": "referrer policy"
+        },
+        {
+          "header": "permissions-policy",
+          "status": "missing",
+          "detail": "permissions policy"
+        },
+        {
+          "header": "server",
+          "status": "info-leak",
+          "detail": "Apache/2.4.29 (Ubuntu)"
+        },
+        {
+          "header": "x-powered-by",
+          "status": "info-leak",
+          "detail": "PHP/7.4.3"
+        }
+      ],
+      "data": {
+        "missing": 6
+      }
+    },
+    {
+      "module": "fingerprint",
+      "summary": "4 technology signal(s)",
+      "findings": [
+        {
+          "technology": "Server",
+          "evidence": "Apache/2.4.29 (Ubuntu)"
+        },
+        {
+          "technology": "X-Powered-By",
+          "evidence": "PHP/7.4.3"
+        },
+        {
+          "technology": "generator",
+          "evidence": "WordPress 6.2"
+        },
+        {
+          "technology": "WordPress",
+          "evidence": "body contains 'wp-content'"
+        }
+      ],
+      "data": {
+        "signals": 4
+      }
+    },
+    {
+      "module": "spider",
+      "summary": "7 page(s) crawled, 7 link(s), 1 email(s)",
+      "findings": [
+        {
+          "type": "page",
+          "value": "http://lab.test"
+        },
+        {
+          "type": "page",
+          "value": "http://lab.test/wp-content/themes/acme/style.css"
+        },
+        {
+          "type": "page",
+          "value": "http://lab.test/static/app.js"
+        },
+        {
+          "type": "page",
+          "value": "http://lab.test/item?id=1"
+        },
+        {
+          "type": "page",
+          "value": "http://lab.test/item?ref=promo"
+        },
+        {
+          "type": "page",
+          "value": "http://lab.test/search?q=popular"
+        },
+        {
+          "type": "page",
+          "value": "http://lab.test/about"
+        },
+        {
+          "type": "email",
+          "value": "admin@lab.local"
+        }
+      ],
+      "data": {
+        "pages": 7,
+        "links": 7,
+        "emails": 1
+      }
+    },
+    {
+      "module": "wordlist",
+      "summary": "25 candidate word(s) from page content",
+      "findings": [
+        {
+          "word": "acme",
+          "count": 3
+        },
+        {
+          "word": "portal",
+          "count": 3
+        },
+        {
+          "word": "support",
+          "count": 3
+        },
+        {
+          "word": "customer",
+          "count": 2
+        },
+        {
+          "word": "search",
+          "count": 2
+        },
+        {
+          "word": "catalog",
+          "count": 2
+        },
+        {
+          "word": "account",
+          "count": 2
+        },
+        {
+          "word": "item",
+          "count": 2
+        },
+        {
+          "word": "welcome",
+          "count": 1
+        },
+        {
+          "word": "manage",
+          "count": 1
+        },
+        {
+          "word": "contact",
+          "count": 1
+        },
+        {
+          "word": "sign",
+          "count": 1
+        },
+        {
+          "word": "featured",
+          "count": 1
+        },
+        {
+          "word": "promoted",
+          "count": 1
+        },
+        {
+          "word": "popular",
+          "count": 1
+        },
+        {
+          "word": "searches",
+          "count": 1
+        },
+        {
+          "word": "partner",
+          "count": 1
+        },
+        {
+          "word": "site",
+          "count": 1
+        },
+        {
+          "word": "questions",
+          "count": 1
+        },
+        {
+          "word": "email",
+          "count": 1
+        },
+        {
+          "word": "admin",
+          "count": 1
+        },
+        {
+          "word": "local",
+          "count": 1
+        },
+        {
+          "word": "corporation",
+          "count": 1
+        },
+        {
+          "word": "orders",
+          "count": 1
+        },
+        {
+          "word": "invoices",
+          "count": 1
+        }
+      ],
+      "data": {
+        "unique_words": 25,
+        "top": 25
+      }
+    },
+    {
+      "module": "dirs",
+      "summary": "3 interesting path(s) of 46 tried",
+      "findings": [
+        {
+          "path": "/admin",
+          "status": 401,
+          "length": 3,
+          "location": ""
+        },
+        {
+          "path": "/robots.txt",
+          "status": 200,
+          "length": 106,
+          "location": ""
+        },
+        {
+          "path": "/sitemap.xml",
+          "status": 200,
+          "length": 239,
+          "location": ""
+        }
+      ],
+      "data": {
+        "found": 3,
+        "tried": 46
+      }
+    },
+    {
+      "module": "misconfig",
+      "summary": "no obvious sensitive-file exposure",
+      "findings": [],
+      "data": {
+        "exposed": 0
+      }
+    },
+    {
+      "module": "whois",
+      "summary": "no RDAP data (network disabled or lookup failed)",
+      "findings": [],
+      "data": {
+        "queried": "https://rdap.org/domain/lab.test"
+      }
+    },
+    {
+      "module": "crtsh",
+      "summary": "no crt.sh data (network disabled or lookup failed)",
+      "findings": [],
+      "data": {
+        "queried": "https://crt.sh/?q=%25.lab.test&output=json"
+      }
+    },
+    {
+      "module": "wayback",
+      "summary": "no Wayback data (network disabled or lookup failed)",
+      "findings": [],
+      "data": {
+        "queried": "http://web.archive.org/cdx/search/cdx?url=lab.test/*&output=json&fl=original&collapse=urlkey&limit=1000"
+      }
+    }
+  ]
+}
