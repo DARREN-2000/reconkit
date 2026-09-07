@@ -6,7 +6,8 @@ We currently provide security updates for the following versions of ReconKit:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
+| 2.2.x   | :white_check_mark: |
+| < 2.2   | :x:                |
 
 ## Reporting a Vulnerability
 

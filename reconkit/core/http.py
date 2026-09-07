@@ -57,7 +57,8 @@ class HttpClient:
         self.ctx = ctx
         opts = getattr(ctx, "options", {}) or {}
         self.insecure = opts.get("insecure", False)
-        self.ua = opts.get("user_agent") or "reconkit/2.1 (authorized security testing)"
+        from .. import __version__
+        self.ua = opts.get("user_agent") or f"reconkit/{__version__} (authorized security testing)"
         self.extra = {}
         cookie = opts.get("cookie")
         if cookie:
