@@ -8,7 +8,7 @@ version = "2.2.0"
 description = "Security Reconnaissance & Assessment Platform"
 readme = "README.md"
 requires-python = ">=3.9"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "ReconKit Authors"}
 ]
@@ -22,6 +22,9 @@ dev = [
     "pytest>=7.0",
     "ruff>=0.1.0"
 ]
+
+[tool.setuptools.packages.find]
+include = ["reconkit*"]
 
 [tool.pytest.ini_options]
 testpaths = ["."]
